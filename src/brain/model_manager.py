@@ -68,7 +68,7 @@ class ModelManager():
         with self.image_generation_model as client:
             result = client.txt2img(
                 guidance_scale=0,
-                num_inference_steps=1,
+                num_inference_steps=3,
                 prompt=inspiration_text,
             )
         image = Image.open(result)
@@ -113,30 +113,31 @@ class ModelManager():
         # Prompt engineer this
         image_descriptions = [
             self.generate_text_from_image(image,
-                            "Describe the focus object in the image in detail in approximately 150 tokens. "
-                            "The goal is to enable a creator to make the main object in this image. "
+                            "Describe the focus object in the image in approximately 70 tokens. "
+                            "The goal is to enable a creator to make the object in this image. Detail the material, texture, ornaments, nuances etc if apt"
                             "Don't mention the background or the photograph specifics but focus on the main object.")
             for
             image in inspiration_images]
         image_prompt_info = ""
         for i, image_description in enumerate(image_descriptions):
-            image_prompt_info += f"Photo-{i + 1} is {image_description} \n"
+            image_prompt_info += f"Image-{i + 1} is {image_description} \n"
 
         print(image_descriptions)
 
         if inspiration_text:
             prompt = f'''
-                    Create one picture by mixing the image descriptions listed below based on the user instructions.
+                    Create one jewellery design sketch by mixing the image descriptions listed below based on the user instructions.
                     {image_prompt_info}
                     Addtional important requirement from the user is : {inspiration_text}
                 '''
         else:
             prompt = f'''
-                    Create one picture by imaging a realistic product based on different image descriptions detailed below.
+                    Create one jewellery sketch based on combining different image descriptions detailed below.
                     {image_prompt_info}
                 '''
         print(prompt)
-        concise_prompt_template = f'''I want to give the below prompt to a stable diffusion model to generate object images for designing. But the prompt is fairly long and complex. Summarize it to 2-3 self-sufficient sentences for me so that stable diffusion can easily be applied on the prompt. Do not reference first and second images, if needed elaborate on the details without referencing. The most important part of the prompt is the last additional important user rerquirement if mentioned. The output style should be sketch-like and not too realistic. \n {prompt}'''
+        concise_prompt_template = f'''Summarize everything below in 2-4 sentences. Assume the reader doesn't have access to the photos but they should still be able to visualize what is intended here. \n {prompt}'''
+        # concise_prompt_template = f'''I want to give the below prompt to a stable diffusion model to generate object images for designing. But the prompt is fairly long and complex. Summarize it to 2-3 self-sufficient sentences for me so that stable diffusion can easily be applied on the prompt. Do not reference first and second images, if needed elaborate on the details without referencing. The most important part of the prompt is the last additional important user rerquirement if mentioned. The output style should be sketch-like and not too realistic. \n {prompt}'''
         concise_prompt = self.llm_prompt_apply(concise_prompt_template)
         print(concise_prompt)
         images = [self.generate_image_from_inspiration_text(concise_prompt) for _ in range(images_to_generate)]
