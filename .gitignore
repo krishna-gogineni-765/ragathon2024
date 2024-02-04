@@ -1,0 +1,12 @@
+*.pyc
+.idea/
+tmp
+.DS_Store
+nohup.out
+__pycache__/
+venv/
+*.env
+Thumbs.db
+*.log
+data/
+scripts/

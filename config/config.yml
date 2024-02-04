@@ -1,0 +1,11 @@
+service_name: design-rag-backend
+
+db_config_astra:
+  endpoint_url: https://4818e55e-e11e-4613-953e-dd0dcf8b30fd-us-east-2.apps.astra.datastax.com
+  token: enc(gAAAAABlvtWzZR-hkNDb6KHnE0IPmDB0Neefvk-30SqJQBKpK3N8qCFLFyNkceeJg1jO5aTvLM4HCvnkkt0N4pAdb-cHugdvoJ_gyska1XZIPYwb08GqwmeTA5kip7evxWyHrEf_daqo-sI5HBn-hd7g16A0MDxkC6g-lvyPtD2Ydih2DknT_CJ_EAjbG95UsfYo_NxJRwV9ELv0RzvUyrRGwT4LnEXZ6Q==)
+
+  image_collection_name: test_ragathon
+
+static_auth_creds:
+  access_key: pass
+  access_secret: TODO
